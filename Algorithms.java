@@ -14,60 +14,7 @@ public class Algorithms {
 
 
 	// STATES: 0=inactive, 1=booting, 2=idle, 3=active, 4=unavailable
-	public Server bestFitSort (Job job) {
-		Server bestS = null;
-		//Sets exist to false
-		Boolean exists = false;
-		//Instantiate variables to be used for fitness calculation
-		int bF = Integer.MAX_VALUE;//Best Fit
-		int mA = Integer.MAX_VALUE;// Minimum available
-
-		public Server[] serverBubbleSort(Server[] serverSort) {
-			int n = serverSort.length;
-			for (int i = 0; i < n - 1; i++) {
-				for (int j = 0; j < n - i - 1; j++) {
-					if (serverSort[j].coreCount > serverSort[j + 1].coreCount) {
-						Server tempServ = serverSort[j];
-						serverSort[j] = serverSort[j + 1];
-						serverSort[j + 1] = tempServ;
-					}
-				}
-			}
-			return serverSort;
-		}
-
-
-		for (Server s : serverSort) {
-			if ((s.coreCount >= job.cpuCores && s.disk >= job.disk && s.memory >= job.memory)) {
-				int fitVal = s.coreCount - job.cpuCores;  //fitness value of a job is amount of cores in server
-				// subtracted by the cores required for the job
-				if ((fitVal < bF) || (fitVal == bF && s.availableTime < mA)) {
-					bF = fitVal;
-					mA = s.availableTime;
-					if (s.state == 0 || s.state == 1 || s.state == 2 || s.state == 3) {
-						exists = true;
-						bestS = s;
-					}
-				}
-			}
-		}
-		if (exists) {
-			return bestS;
-		} else {//when the server is running nothing
-
-			int otherBF = Integer.MAX_VALUE;
-			Server sAlt = null;
-			for (Server s : systemServers) {
-				int otherFitVal = s.coreCount - job.cpuCores;
-				if (otherFitVal >= 0 && otherFitVal < otherBF && s.disk > job.disk && s.memory > job.memory) {
-					otherBF = otherFitVal;//Return the best fit active server based on initial resource
-					sAlt = s;
-				}
-			}
-			sAlt.id = 0;
-			return sAlt;
-		}
-	}
+	
 
 	public Server bFitMem (Job job) {
 		Server bestS = null;
@@ -254,14 +201,13 @@ public class Algorithms {
 	 * resources to be able to handle the job.
 	 */
 
-	public Server bestFit (Job job) {
+	public Server bestFitSort (Job job) {
 		Server bestS = null;
 		//Sets exist to false
 		Boolean exists = false;
 		//Instantiate variables to be used for fitness calculation
 		int bF = Integer.MAX_VALUE;//Best Fit
 		int mA = Integer.MAX_VALUE;// Minimum available
-
 
         for (Server s : servers) {
 			if ((s.coreCount >= job.cpuCores && s.disk >= job.disk && s.memory >= job.memory)) {
